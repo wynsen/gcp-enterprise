@@ -1,0 +1,4 @@
+region = "australia-southeast1"
+credentials_file_path = "~/.config/gcloud/terraform-123456789000.json"
+folder_id = "123456789001"
+billing_account_id = "123456-7890AB-CDEF00"
