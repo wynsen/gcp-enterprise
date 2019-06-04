@@ -1,5 +1,8 @@
 # GCP Enterprise Terraform Setup
 
+See Medium stories for more details on the design and use of this Terraform code:
+- [GCP: Folder Hierarchy & Group Management with Terraform](https://medium.com/@wynsen/gcp-folder-hierarchy-group-management-with-terraform-3a870cd5357e)
+
 ## Pre-Requisites
 1. Bootstrap Terraform
     - See Bootstrap section below
@@ -10,12 +13,25 @@
     - Follow: [Terraform G Suite Provider](https://github.com/DeviaVir/terraform-provider-gsuite/blob/master/README.md)
     - Reference: [G Suite Domain-Wide Delegation of Authority](https://developers.google.com/admin-sdk/directory/v1/guides/delegation)
 
+
 ## Deployment Order
 1. Organization
-    - (e.g. [./examples/org/lor.tfvars.example](./examples/org/lor.tfvars.example))
+    - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
     - Comment out Leaf Folders configuration due to:
      - Dependency on a Host Project with a Shared VPC Network
      - Dependency on an Images Project
+2. Host Project
+    - (e.g. [./examples/prj-host/org-shared-net.tfvars.example](./examples/prj-host/org-shared-net.tfvars.example))
+3. Shared VPC Network
+    - (e.g. [./examples/res-network/org-shared-net.tfvars.example](./examples/res-network/org-shared-net.tfvars.example))
+4. DNS Managed Zones
+    - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
+    - Comment out org-np-app1.tf content
+5. Organization (2nd iteration)
+    - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
+    - Uncomment Leaf Folders
+    - Comment out Images Project Variable (i.e. images_project_id)
+
 
 ## Bootstrap
 The following commands can be run in GCP Console Cloud Shell
@@ -116,6 +132,8 @@ gcloud services enable cloudbilling.googleapis.com \
 gcloud services enable compute.googleapis.com \
   --project ${TF_ADMIN}
 gcloud services enable container.googleapis.com \
+  --project ${TF_ADMIN}
+gcloud services enable dns.googleapis.com \
   --project ${TF_ADMIN}
 gcloud services enable iam.googleapis.com \
   --project ${TF_ADMIN}

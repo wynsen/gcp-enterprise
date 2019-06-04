@@ -1,3 +1,9 @@
+# Module to create a Leaf Folder, Terraform Service Account and Groups
+
+# May need to be re-run Terraform Apply if the following false error is encountered:
+#  Error setting IAM policy for folder "XXX": googleapi: Error 400:
+#  One or more users named in the policy do not belong to a permitted customer
+
 data "google_folder" "parent" {
   folder              = "${var.parent_folder_name}"
   lookup_organization = true

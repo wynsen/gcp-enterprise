@@ -29,8 +29,6 @@ variable "host_project_id" {
   description = "Shared VPC Network Host Project ID"
 }
 
-/*
 variable "images_project_id" {
   description = "Images Project ID"
 }
-*/
