@@ -18,8 +18,8 @@ See Medium stories for more details on the design and use of this Terraform code
 1. Organization
     - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
     - Comment out Leaf Folders configuration due to:
-     - Dependency on a Host Project with a Shared VPC Network
-     - Dependency on an Images Project
+      - Dependency on a Host Project with a Shared VPC Network
+      - Dependency on an Images Project
 2. Host Project
     - (e.g. [./examples/prj-host/org-shared-net.tfvars.example](./examples/prj-host/org-shared-net.tfvars.example))
 3. Shared VPC Network
@@ -30,7 +30,7 @@ See Medium stories for more details on the design and use of this Terraform code
     - Comment out Service Project variable (i.e. service_project_id)
 5. Organization (2nd iteration)
     - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
-    - Uncomment Leaf Folders
+    - Uncomment Leaf Folders configuration with the introduction of the Shared VPC Network
     - Comment out Images Project Variable (i.e. images_project_id)
 
 
