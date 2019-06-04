@@ -26,7 +26,8 @@ See Medium stories for more details on the design and use of this Terraform code
     - (e.g. [./examples/res-network/org-shared-net.tfvars.example](./examples/res-network/org-shared-net.tfvars.example))
 4. DNS Managed Zones
     - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
-    - Comment out org-np-app1.tf content
+    - Comment out [./examples/dns/org-np-app1.tf](./examples/dns/org-np-app1.tf) content
+    - Comment out Service Project variable (i.e. service_project_id)
 5. Organization (2nd iteration)
     - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
     - Uncomment Leaf Folders
