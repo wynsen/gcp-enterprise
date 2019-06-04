@@ -1,0 +1,5 @@
+region = "australia-southeast1"
+credentials_file_path = "~/.config/gcloud/terraform-123456789000.json"
+host_project_id = "org-shared-net"
+shared_vpc_name = "org-shared-net-int-vpc"
+service_project_id = "org-app1-vm-dev-123456"

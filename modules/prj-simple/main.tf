@@ -1,4 +1,5 @@
-# Module to create a Host Project ready for Shared VPC Network deployment
+# Module to create a Service Project without Subnet
+# Including the Host Project ID enables PSA networking privileges (e.g. for Cloud SQL)
 
 locals {
   deployment_name = "${var.company_id}-${var.asset_id}-${var.component_id}${var.environment_id == "" ? "" : format("-%s", var.environment_id)}${var.instance_id == "" ? "" : format("-%s", var.instance_id)}"
@@ -13,7 +14,7 @@ resource "random_id" "project" {
   byte_length = 3
 }
 
-# Create Host Project
+# Create Project
 # (Auto-Create Network is not set to False due to Organization Policy)
 resource "google_project" "project" {
   name            = "${local.deployment_name}"
@@ -23,36 +24,26 @@ resource "google_project" "project" {
   billing_account = "${var.billing_account_id}"
 }
 
-# Enable Compute API in Host Project
+# Enable Compute API in Service Project
 resource "google_project_service" "project_compute" {
   project            = "${google_project.project.project_id}"
   service            = "compute.googleapis.com"
   disable_on_destroy = false
 }
 
-# Enable Container API in Host Project
-resource "google_project_service" "project_container" {
-  project            = "${google_project.project.project_id}"
-  service            = "container.googleapis.com"
-  disable_on_destroy = false
+# Set Project to be a Service Project & associate with Host Project
+resource "google_compute_shared_vpc_service_project" "project" {
+  count           = "${var.host_project_id == "" ? 0 : 1}"
+  host_project    = "${var.host_project_id}"
+  service_project = "${google_project.project.project_id}"
+  depends_on      = ["google_project_service.project_compute"]
 }
 
-# Enable Service Networking API in Host Project
-resource "google_project_service" "project_servicenetworking" {
+# Enable Service Networking API in Service Project
+resource "google_project_service" "servicenetworking" {
+  count              = "${var.host_project_id == "" ? 0 : 1}"
   project            = "${google_project.project.project_id}"
   service            = "servicenetworking.googleapis.com"
+  depends_on         = ["google_compute_shared_vpc_service_project.project"]
   disable_on_destroy = false
-}
-
-# Enable Cloud DNS API in Host Project
-resource "google_project_service" "project_dns" {
-  project            = "${google_project.project.project_id}"
-  service            = "dns.googleapis.com"
-  disable_on_destroy = false
-}
-
-# Set Project to be a Host Project
-resource "google_compute_shared_vpc_host_project" "project" {
-  project    = "${google_project.project.project_id}"
-  depends_on = ["google_project_service.project_compute", "google_project_service.project_container", "google_project_service.project_servicenetworking", "google_project_service.project_dns"]
 }

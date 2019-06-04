@@ -1,7 +1,0 @@
-region = "australia-southeast1"
-credentials_file_path = "~/.config/gcloud/terraform-123456789000.json"
-host_project_id = "lor-cs-net-green"
-ipv4_range_psa = "10.0.240.0/20"
-private_dns_zone_name = "domain.internal."
-private_dns_zone_name_reverse = "0.10.in-addr.arpa."
-router_asn = 64514

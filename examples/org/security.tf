@@ -4,9 +4,10 @@
 
 # A separate Terraform deployment can be configured and executed in the context of an
 # Organization Policy Administrator, however this requires Organization Policies applied to Folders
-# to be configured in concert & two deployments executed. In lieu of the aforementioned, this file
-# is to be configured with Code Owners security in GIT and managed by the Security Team. Folder IDs
-# can thus be dynamically passed to the Organization Polcity Resources.
+# to be configured in concert & two deployments executed.
+
+# In lieu of the above, this file is to be configured with Code Owners security in GIT and managed by
+# the Security Team. Folder IDs can therefore be dynamically passed to the Organization Policy Resources.
 
 # Organization Policy Configuration
 resource "google_organization_policy" "allowed_policy_member_domains" {
@@ -86,5 +87,3 @@ resource "google_folder_organization_policy" "trusted_image_projects_override" {
     }
   }
 }
-
-
