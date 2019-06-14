@@ -52,7 +52,7 @@ module "res_gke_cluster" {
 
 # Create Load Balancer Backend for Regional GKE Cluster with three Instance Groups
 resource "google_compute_region_backend_service" "cluster" {
-  name                            = "${data.google_project.project.name}-lb"
+  name                            = "${data.google_project.project.name}-gke-lb"
   project                         = "${data.google_project.project.project_id}"
   region                          = "${var.region}"
   health_checks                   = ["${google_compute_health_check.cluster.self_link}"]

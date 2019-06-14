@@ -143,7 +143,6 @@ resource "google_dns_managed_zone" "private_reverse" {
   }
 }
 
-
 # Public Cloud DNS
 /*
 resource "google_dns_managed_zone" "public" {
@@ -153,7 +152,6 @@ resource "google_dns_managed_zone" "public" {
   dns_name   = "domain.com."
 }
 */
-
 
 # Private Cloud DNS
 resource "google_dns_managed_zone" "onprem" {
@@ -178,7 +176,6 @@ resource "google_dns_managed_zone" "onprem" {
     }
   }
 }
-
 
 resource "google_dns_policy" "private" {
   provider                  = "google-beta"
