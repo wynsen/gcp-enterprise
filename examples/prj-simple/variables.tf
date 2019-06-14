@@ -8,6 +8,14 @@ variable "credentials_file_path" {
   default     = "~/.config/gcloud/terraform-admin.json"
 }
 
+variable "folder_id" {
+  description = "The ID of the Folder to create the Project in"
+}
+
+variable "billing_account_id" {
+  description = "The ID of the billing account to associate the Project with"
+}
+
 variable "host_project_id" {
-  description = "Shared VPC Network Host Project ID"
+  description = "(Optional) Shared VPC Host Project ID - only to be provided for PSA (e.g. Cloud SQL)"
 }

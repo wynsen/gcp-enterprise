@@ -1,35 +1,25 @@
+# Example of an Folder Hierarchy deployment
 # https://cloud.google.com/resource-manager/docs/cloud-platform-resource-hierarchy
-
 # A User Images Project is to be created prior to enabling the related configurations
 
 provider "google" {
-  region = "${var.region}"
+  region      = "${var.region}"
   credentials = "${file("${var.credentials_file_path}")}"
-  version = "2.7.0"
+  version     = "2.7.0"
 }
 
 provider "gsuite" {
   oauth_scopes = [
     "https://www.googleapis.com/auth/admin.directory.group"
   ]
-  credentials = "${file("${var.credentials_gsuite_file_path}")}"
+  credentials             = "${file("${var.credentials_gsuite_file_path}")}"
   impersonated_user_email = "${var.credentials_gsuite_impersonated_user_email}"
-  version = "0.1.19"
+  version                 = "0.1.19"
 }
 
 
 data "google_organization" "org" {
   organization = "${var.org_id}"
-}
-
-/*
-data "google_project" "images" {
-  project_id = "${var.images_project_id}"
-}
-*/
-
-data "google_project" "host" {
-  project_id = "${var.host_project_id}"
 }
 
 
@@ -73,11 +63,6 @@ resource "google_folder" "subsidiary" {
 }
 
 # Branch Folders
-resource "google_folder" "nonprod_tribe0" {
-  display_name = "nonprod-tribe0"
-  parent       = "${google_folder.nonprod.name}"
-}
-
 resource "google_folder" "nonprod_tribe1" {
   display_name = "nonprod-tribe1"
   parent       = "${google_folder.nonprod.name}"
@@ -119,20 +104,22 @@ resource "google_folder" "shared_network" {
 # (Terraform Service Accounts for Project Resource Management)
 # (GSuite Groups for Project Viewers)
 module "shared_servers" {
-  source = "github.com/wynsen/gcp-enterprise//modules/org-leaf?ref=v0.0.1"
-  folder_name = "shared-servers"
+  source = "github.com/wynsen/gcp-enterprise//modules/org-leaf?ref=v0.0.3"
+
+  folder_name        = "shared-servers"
   parent_folder_name = "${google_folder.shared.name}"
-  admin_project_id = "${var.admin_project_id}"
-  host_project_id = "${var.host_project_id}"
+  admin_project_id   = "${var.admin_project_id}"
+  host_project_id    = "${var.host_project_id}"
   breakglass_enabled = true
 }
 
 module "nonprod_tribe1_app1-dev" {
-  source = "github.com/wynsen/gcp-enterprise//modules/org-leaf?ref=v0.0.1"
-  folder_name = "nonprod-tribe1-app1dev"
-  parent_folder_name = "${google_folder.nonprod_tribe0.name}"
-  admin_project_id = "${var.admin_project_id}"
-  host_project_id = "${var.host_project_id}"
-#  images_project_id = "${var.images_project_id}"
+  source = "github.com/wynsen/gcp-enterprise//modules/org-leaf?ref=v0.0.3"
+
+  folder_name        = "nonprod-tribe1-app1dev"
+  parent_folder_name = "${google_folder.nonprod_tribe1.name}"
+  admin_project_id   = "${var.admin_project_id}"
+  host_project_id    = "${var.host_project_id}"
+# images_project_id  = "${var.images_project_id}"
   breakglass_enabled = false
 }

@@ -1,8 +1,7 @@
-# https://cloud.google.com/vpc/docs/shared-vpc
-# https://cloud.google.com/vpc/docs/configure-private-services-access
+# Module to create a Host Project ready for Shared VPC Network deployment
 
 locals {
-  deployment_name = "${var.client_code}-${var.client_tribe}-${var.client_squad}-${var.client_project}${var.client_environment == "" ? "" : format("-%s", var.client_environment)}${var.client_instance_number == "" ? "" : format("-%03s", var.client_instance_number)}"
+  deployment_name = "${var.company_id}-${var.asset_id}-${var.component_id}${var.environment_id == "" ? "" : format("-%s", var.environment_id)}${var.instance_id == "" ? "" : format("-%s", var.instance_id)}"
 }
 
 # Generate a new ID when a Project name is created or changed
@@ -18,7 +17,7 @@ resource "random_id" "project" {
 # (Auto-Create Network is not set to False due to Organization Policy)
 resource "google_project" "project" {
   name            = "${local.deployment_name}"
-  project_id      = "${local.deployment_name}${var.project_id_suffix == "true" ? format("-%s", random_id.project.hex) : ""}"
+  project_id      = "${local.deployment_name}${var.project_id_suffix ? format("-%s", random_id.project.hex) : ""}"
   org_id          = "${var.org_id}"
   folder_id       = "${var.folder_id}"
   billing_account = "${var.billing_account_id}"

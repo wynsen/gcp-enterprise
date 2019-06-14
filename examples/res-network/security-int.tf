@@ -1,8 +1,8 @@
 # Allow the Shared VPC Network to be accessed by Google Load Balancers for Health-Checking
-resource "google_compute_firewall" "lb-healthcheck" {
-  name    = "allow-lb-healthcheck"
+resource "google_compute_firewall" "lb-healthcheck_int" {
+  name    = "allow-int-lb-healthcheck"
   project = "${data.google_project.host_project.project_id}"
-  network = "${module.res_network.network_url}"
+  network = "${module.res_network_int.network_url}"
 
   allow {
     protocol = "icmp"
@@ -16,14 +16,14 @@ resource "google_compute_firewall" "lb-healthcheck" {
     protocol = "udp"
   }
 
-  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
+  source_ranges = "${data.google_compute_lb_ip_ranges.ranges.http_ssl_tcp_internal}"
 }
 
 # Allow the Shared VPC Network to be accessed with ICMP, SSH, RDP and WinRM from RFC1918 address space
-resource "google_compute_firewall" "management" {
-  name    = "allow-management"
+resource "google_compute_firewall" "management_int" {
+  name    = "allow-int-management"
   project = "${data.google_project.host_project.project_id}"
-  network = "${module.res_network.network_url}"
+  network = "${module.res_network_int.network_url}"
 
   allow {
     protocol = "icmp"
@@ -38,10 +38,10 @@ resource "google_compute_firewall" "management" {
 }
 
 # Allow the Shared VPC Network to be accessed by Private Cloud Build Custom Workers
-resource "google_compute_firewall" "cloudbuild" {
-  name    = "allow-gcb-workers-443"
+resource "google_compute_firewall" "cloudbuild_int" {
+  name    = "allow-int-gcb-workers-443"
   project = "${data.google_project.host_project.project_id}"
-  network = "${module.res_network.network_url}"
+  network = "${module.res_network_int.network_url}"
 
   allow {
     protocol = "tcp"
@@ -53,10 +53,10 @@ resource "google_compute_firewall" "cloudbuild" {
 
 # Allow the Dataflow Workers to be accessed by Dataflow Workers
 # https://cloud.google.com/dataflow/docs/guides/routes-firewall
-resource "google_compute_firewall" "dataflow" {
-  name    = "allow-dataflow-workers-all"
+resource "google_compute_firewall" "dataflow_int" {
+  name    = "allow-int-dataflow-workers-all"
   project = "${data.google_project.host_project.project_id}"
-  network = "${module.res_network.network_url}"
+  network = "${module.res_network_int.network_url}"
 
   allow {
     protocol = "tcp"

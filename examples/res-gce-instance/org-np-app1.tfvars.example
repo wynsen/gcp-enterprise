@@ -1,0 +1,4 @@
+region = "australia-southeast1"
+credentials_file_path = "~/.config/gcloud/terraform-123456789001-editor.json"
+project_id = "org-app1-vm-dev-123456"
+host_project_id = "org-shared-net"
