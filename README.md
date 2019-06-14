@@ -2,7 +2,8 @@
 
 See Medium stories for more details on the design and use of this Terraform code:
 - [GCP: Folder Hierarchy & Group Management with Terraform](https://medium.com/@wynsen/gcp-folder-hierarchy-group-management-with-terraform-3a870cd5357e)
-- [GCP: Private Kubernetes Cluster, etc. Management with Terraform](https://medium.com/@wynsen/gcp-shared-vpc-network-etc-management-with-terraform-c011d71a1042)
+- [GCP: Shared VPC Network, etc. Management with Terraform](https://medium.com/@wynsen/gcp-shared-vpc-network-etc-management-with-terraform-c011d71a1042)
+- [GCP: Private Kubernetes Cluster, etc. Management with Terraform](https://medium.com/@wynsen/gcp-private-kubernetes-cluster-etc-management-with-terraform-36c9df9279d7)
 
 ## Pre-Requisites
 1. Bootstrap Terraform
