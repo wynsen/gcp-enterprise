@@ -14,7 +14,7 @@ provider "google-beta" {
 
 # GKE Project Configuration
 module "prj_gke" {
-  source = "github.com/wynsen/gcp-enterprise//modules/prj-compute?ref=v0.0.3"
+  source = "github.com/wynsen/gcp-enterprise//modules/prj-gke?ref=v0.0.3"
 
   company_id               = "org"
   asset_id                 = "app1"

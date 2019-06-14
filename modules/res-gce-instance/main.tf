@@ -35,9 +35,9 @@ resource "google_compute_instance" "vm" {
 		subnetwork         = "${var.subnet_name}"
 		subnetwork_project = "${var.host_project_id}"
 
-		access_config {
+#		access_config {
 			# Ephemeral IP
-		}
+#		}
 	}
 
   scheduling {
