@@ -16,7 +16,7 @@ resource "google_compute_firewall" "lb-healthcheck_ext" {
     protocol = "udp"
   }
 
-  source_ranges = ["130.211.0.0/22", "35.191.0.0/16"]
+  source_ranges = "${data.google_compute_lb_ip_ranges.ranges.http_ssl_tcp_internal}"
 }
 
 # Allow the Shared VPC Network to be accessed with ICMP, SSH, RDP and WinRM from RFC1918 address space

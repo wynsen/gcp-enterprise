@@ -1,3 +1,4 @@
+/*
 # Find GCE Instances
 data "google_compute_instance" "server1" {
     name    = "org-app1-vm-dev-nginx-vm"
@@ -27,3 +28,36 @@ resource "google_dns_record_set" "server1_reverse" {
 
   rrdatas = ["${google_dns_record_set.server1.name}"]
 }
+*/
+
+/*
+# Find Internal Load Balancer (Forwarding Rule)
+data "google_compute_forwarding_rule" "gke1" {
+    name    = "org-app1-gke-dev-gke-forward"
+    project = "${var.service_project_gke_id}"
+    region  = "${var.region}"
+}
+
+# DNS Records Configuration
+resource "google_dns_record_set" "gke1" {
+  name    = "gke1.${google_dns_managed_zone.private.dns_name}"
+  project = "${var.host_project_id}"
+  type    = "A"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.private.name}"
+
+  rrdatas = ["${data.google_compute_forwarding_rule.gke.ip_address}"]
+}
+
+resource "google_dns_record_set" "gke1_reverse" {
+  name    = "${element(split(".", google_dns_record_set.gke1.rrdatas.0), 3)}.${element(split(".", "${google_dns_record_set.gke1.rrdatas.0}"), 2)}.${google_dns_managed_zone.private_reverse.dns_name}"
+  project = "${var.host_project_id}"
+  type    = "PTR"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.private_reverse.name}"
+
+  rrdatas = ["${google_dns_record_set.gke1.name}"]
+}
+*/

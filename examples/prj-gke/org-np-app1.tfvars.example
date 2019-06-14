@@ -1,0 +1,7 @@
+region = "australia-southeast1"
+credentials_file_path = "~/.config/gcloud/terraform-123456789000.json"
+folder_id = "123456789001"
+billing_account_id = "123456-7890AB-CDEF00"
+host_project_id = "org-shared-net"
+terraform_delegate_email = "terraform-123456789001@terraform-admin.iam.gserviceaccount.com"
+editor_group_email = "folder-123456789001-editors@domain.com"

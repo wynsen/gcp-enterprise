@@ -4,8 +4,8 @@ locals {
   deployment_name = "${var.company_id}-${var.asset_id}-${var.component_id}${var.environment_id == "" ? "" : format("-%s", var.environment_id)}${var.instance_id == "" ? "" : format("-%s", var.instance_id)}"
 }
 
-data "google_compute_network" "shared_vpc" {
-  name    = "${var.shared_vpc_name}"
+data "google_compute_network" "shared" {
+  name    = "${var.shared_network_name}"
   project = "${var.host_project_id}"
 }
 
@@ -18,7 +18,7 @@ resource "random_id" "project" {
   byte_length = 3
 }
 
-# Create Service Project.
+# Create Service Project
 # (Auto-Create Network is not set to False due to Organization Policy)
 resource "google_project" "project" {
   name            = "${local.deployment_name}"
@@ -43,12 +43,12 @@ resource "google_compute_shared_vpc_service_project" "project" {
 }
 
 # Create a Subnet for Service Project with a single Primary IP Range (e.g. for VMs)
-resource "google_compute_subnetwork" "service_subnet" {
+resource "google_compute_subnetwork" "subnet" {
   name                     = "${local.deployment_name}-subnet"
   project                  = "${var.host_project_id}"
   region                   = "${var.region}"
   ip_cidr_range            = "${var.ipv4_range_primary}"
-  network                  = "${data.google_compute_network.shared_vpc.self_link}"
+  network                  = "${data.google_compute_network.shared.self_link}"
   enable_flow_logs         = "${var.subnet_flow_logs}"
   private_ip_google_access = true
 }
@@ -60,33 +60,33 @@ resource "google_compute_project_metadata_item" "oslogin" {
   depends_on = ["google_compute_shared_vpc_service_project.project"]
 }
 
-# Assign subnet-use privileges to the Service Project's Google APIs Service Agent with IAM
+# Assign Subnet User privileges
 # Needs to be manually re-run a second time if Subnetwork is re-created
-resource "google_compute_subnetwork_iam_member" "service_network_cloudservices" {
+resource "google_compute_subnetwork_iam_member" "subnetuser_cloudservices" {
   provider   = "google-beta"
   project    = "${var.host_project_id}"
   region     = "${var.region}"
-  subnetwork = "${google_compute_subnetwork.service_subnet.name}"
+  subnetwork = "${google_compute_subnetwork.subnet.name}"
   role       = "roles/compute.networkUser"
   member     = "serviceAccount:${google_project.project.number}@cloudservices.gserviceaccount.com"
   depends_on = ["google_compute_shared_vpc_service_project.project"]
 }
 
-resource "google_compute_subnetwork_iam_member" "service_network_terraform" {
+resource "google_compute_subnetwork_iam_member" "subnetuser_terraform" {
   provider   = "google-beta"
   project    = "${var.host_project_id}"
   region     = "${var.region}"
-  subnetwork = "${google_compute_subnetwork.service_subnet.name}"
+  subnetwork = "${google_compute_subnetwork.subnet.name}"
   role       = "roles/compute.networkUser"
   member     = "serviceAccount:${var.terraform_delegate_email}"
   depends_on = ["google_compute_shared_vpc_service_project.project"]
 }
 
-resource "google_compute_subnetwork_iam_member" "service_network_editors" {
+resource "google_compute_subnetwork_iam_member" "subnetuser_editors" {
   provider   = "google-beta"
   project    = "${var.host_project_id}"
   region     = "${var.region}"
-  subnetwork = "${google_compute_subnetwork.service_subnet.name}"
+  subnetwork = "${google_compute_subnetwork.subnet.name}"
   role       = "roles/compute.networkUser"
   member     = "group:${var.editor_group_email}"
   depends_on = ["google_compute_shared_vpc_service_project.project"]

@@ -17,10 +17,12 @@ data "google_project" "host_project" {
   project_id = "${var.host_project_id}"
 }
 
+# Obtain Load Balancer IP Ranges for Firewall Rules
+data "google_compute_lb_ip_ranges" "ranges" {}
 
 # Internal Shared VPC Network
 module "res_network_int" {
-  source = "github.com/wynsen/gcp-enterprise//modules/res-network?ref=v0.0.2"
+  source = "github.com/wynsen/gcp-enterprise//modules/res-network?ref=v0.0.3"
 
   instance_id     = "int"
   host_project_id = "${var.host_project_id}"
@@ -32,7 +34,7 @@ module "res_network_int" {
 
 # External Shared VPC Network
 module "res_network_ext" {
-  source = "github.com/wynsen/gcp-enterprise//modules/res-network?ref=v0.0.2"
+  source = "github.com/wynsen/gcp-enterprise//modules/res-network?ref=v0.0.3"
 
   instance_id     = "ext"
   host_project_id = "${var.host_project_id}"

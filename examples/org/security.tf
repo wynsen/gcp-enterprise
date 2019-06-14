@@ -50,8 +50,9 @@ resource "google_organization_policy" "vm_external_ip_access" {
   }
 }
 
+/*
 resource "google_folder_organization_policy" "vm_external_ip_access_override" {
-  folder     = "${google_folder.shared_network.id}"
+  folder     = "${module.shared_servers.folder_id}"
   constraint = "compute.vmExternalIpAccess"
 
   list_policy {
@@ -61,7 +62,6 @@ resource "google_folder_organization_policy" "vm_external_ip_access_override" {
   }
 }
 
-/*
 resource "google_organization_policy" "trusted_image_projects" {
   org_id     = "${var.org_id}"
   constraint = "compute.trustedImageProjects"
@@ -70,7 +70,8 @@ resource "google_organization_policy" "trusted_image_projects" {
     allow {
       values = [
         "projects/${var.images_project_id}",
-        "projects/gce-uefi-images"
+        "projects/gce-uefi-images",
+        "projects/debian-cloud"
       ]
     }
   }

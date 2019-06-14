@@ -7,7 +7,7 @@ variable "asset_id" {
 }
 
 variable "component_id" {
-  description = "Asset Component ID (e.g. storage)"
+  description = "Asset Component ID (e.g. containers)"
 }
 
 variable "environment_id" {
@@ -60,7 +60,15 @@ variable "shared_network_name" {
 }
 
 variable "ipv4_range_primary" {
-  description = "Subnet IPv4 Range (CIDR) Primary"
+  description = "Subnet IPv4 Range (CIDR) Primary (e.g. /27 for GKE)"
+}
+
+variable "ipv4_range_secondary0" {
+  description = "Subnet IPv4 Range (CIDR) Secondary 0 (e.g. /19 for GKE)"
+}
+
+variable "ipv4_range_secondary1" {
+  description = "Subnet IPv4 Range (CIDR) Secondary 1 (e.g. /24 for GKE)"
 }
 
 variable "subnet_flow_logs" {

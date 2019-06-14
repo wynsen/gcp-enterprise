@@ -25,7 +25,7 @@ resource "google_project" "project" {
 }
 
 # Enable Compute API in Service Project
-resource "google_project_service" "project_compute" {
+resource "google_project_service" "compute" {
   project            = "${google_project.project.project_id}"
   service            = "compute.googleapis.com"
   disable_on_destroy = false
@@ -36,7 +36,7 @@ resource "google_compute_shared_vpc_service_project" "project" {
   count           = "${var.host_project_id == "" ? 0 : 1}"
   host_project    = "${var.host_project_id}"
   service_project = "${google_project.project.project_id}"
-  depends_on      = ["google_project_service.project_compute"]
+  depends_on      = ["google_project_service.compute"]
 }
 
 # Enable Service Networking API in Service Project

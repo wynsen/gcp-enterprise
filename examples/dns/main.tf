@@ -32,10 +32,87 @@ data "google_project" "host_project" {
   project_id = "${var.host_project_id}"
 }
 
-data "google_compute_network" "shared_vpc" {
-  name    = "${var.shared_vpc_name}"
+data "google_compute_network" "shared" {
+  name    = "${var.shared_network_name}"
   project = "${var.host_project_id}"
 }
+
+
+# Split DNS configuration for Google APIs resolving to Restricted IPs
+resource "google_dns_managed_zone" "apis" {
+  provider   = "google-beta"
+  name       = "${data.google_project.host_project.name}-apis-dns"
+  project    = "${data.google_project.host_project.project_id}"
+  dns_name   = "googleapis.com."
+  visibility = "private"
+
+  private_visibility_config {
+    networks {
+      network_url = "${data.google_compute_network.shared.self_link}"
+    }
+  }
+}
+
+resource "google_dns_record_set" "apis_a" {
+  name    = "restricted.googleapis.com."
+  project = "${data.google_project.host_project.project_id}"
+  type    = "A"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.apis.name}"
+
+  rrdatas = ["199.36.153.4", "199.36.153.5", "199.36.153.6", "199.36.153.7"]
+}
+
+resource "google_dns_record_set" "apis_cname" {
+  name    = "*.googleapis.com."
+  project = "${data.google_project.host_project.project_id}"
+  type    = "CNAME"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.apis.name}"
+
+  rrdatas = ["restricted.googleapis.com."]
+}
+
+
+# Split DNS configuration for GCR IO resolving to Restricted IPs
+resource "google_dns_managed_zone" "gcr" {
+  provider   = "google-beta" 
+  name       = "${data.google_project.host_project.name}-gcr-dns"
+  project    = "${data.google_project.host_project.project_id}"
+  dns_name   = "gcr.io."
+  visibility = "private"
+
+  private_visibility_config {
+    networks {
+      network_url = "${data.google_compute_network.shared.self_link}"
+    }
+  }
+}
+
+resource "google_dns_record_set" "gcr_a" {
+  name    = "gcr.io."
+  project = "${data.google_project.host_project.project_id}"
+  type    = "A"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.gcr.name}"
+
+  rrdatas = ["199.36.153.4", "199.36.153.5", "199.36.153.6", "199.36.153.7"]
+}
+
+resource "google_dns_record_set" "gcr_cname" {
+  name    = "*.gcr.io."
+  project = "${data.google_project.host_project.project_id}"
+  type    = "CNAME"
+  ttl     = 300
+
+  managed_zone = "${google_dns_managed_zone.gcr.name}"
+
+  rrdatas = ["gcr.io."]
+}
+
 
 # Private Cloud DNS
 resource "google_dns_managed_zone" "private" {
@@ -47,7 +124,7 @@ resource "google_dns_managed_zone" "private" {
 
   private_visibility_config {
     networks {
-      network_url = "${data.google_compute_network.shared_vpc.self_link}"
+      network_url = "${data.google_compute_network.shared.self_link}"
     }
   }
 }
@@ -61,10 +138,11 @@ resource "google_dns_managed_zone" "private_reverse" {
 
   private_visibility_config {
     networks {
-      network_url = "${data.google_compute_network.shared_vpc.self_link}"
+      network_url = "${data.google_compute_network.shared.self_link}"
     }
   }
 }
+
 
 # Public Cloud DNS
 /*
@@ -76,6 +154,7 @@ resource "google_dns_managed_zone" "public" {
 }
 */
 
+
 # Private Cloud DNS
 resource "google_dns_managed_zone" "onprem" {
   provider   = "google-beta"
@@ -86,7 +165,7 @@ resource "google_dns_managed_zone" "onprem" {
 
   private_visibility_config {
     networks {
-      network_url = "${data.google_compute_network.shared_vpc.self_link}"
+      network_url = "${data.google_compute_network.shared.self_link}"
     }
   }
 
@@ -100,6 +179,7 @@ resource "google_dns_managed_zone" "onprem" {
   }
 }
 
+
 resource "google_dns_policy" "private" {
   provider                  = "google-beta"
   name                      = "${data.google_project.host_project.name}-prv-dns-policy"
@@ -108,6 +188,6 @@ resource "google_dns_policy" "private" {
   enable_logging            = false
 
   networks {
-    network_url = "${data.google_compute_network.shared_vpc.self_link}"
+    network_url = "${data.google_compute_network.shared.self_link}"
   }
 }

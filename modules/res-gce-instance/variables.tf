@@ -32,8 +32,8 @@ variable "machine_type" {
 }
 
 variable "image_project" {
-  description = "Project containing the Image Family used for the VM Instance (default: gce-uefi-images)"
-  default     = "gce-uefi-images"
+  description = "Project containing the Image Family used for the VM Instance (default: debian-cloud)"
+  default     = "debian-cloud"
 }
 
 variable "image_family" {

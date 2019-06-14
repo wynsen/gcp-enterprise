@@ -2,6 +2,7 @@
 
 See Medium stories for more details on the design and use of this Terraform code:
 - [GCP: Folder Hierarchy & Group Management with Terraform](https://medium.com/@wynsen/gcp-folder-hierarchy-group-management-with-terraform-3a870cd5357e)
+- [GCP: Private Kubernetes Cluster, etc. Management with Terraform](https://medium.com/@wynsen/gcp-shared-vpc-network-etc-management-with-terraform-c011d71a1042)
 
 ## Pre-Requisites
 1. Bootstrap Terraform
@@ -26,12 +27,24 @@ See Medium stories for more details on the design and use of this Terraform code
     - (e.g. [./examples/res-network/org-shared-net.tfvars.example](./examples/res-network/org-shared-net.tfvars.example))
 4. DNS Managed Zones
     - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
-    - Comment out [./examples/dns/org-np-app1.tf](./examples/dns/org-np-app1.tf) content
-    - Comment out Service Project variable (i.e. service_project_id)
 5. Organization (2nd iteration)
     - (e.g. [./examples/org/org.tfvars.example](./examples/org/org.tfvars.example))
     - Uncomment Leaf Folders configuration with the introduction of the Shared VPC Network
     - Comment out Images Project Variable (i.e. images_project_id)
+6. Compute Project
+    - (e.g. [./examples/prj-compute/org-np-app1.tfvars.example](./examples/prj-compute/org-np-app1.tfvars.example))
+7. GCE Instance
+    - (e.g. [./examples/res-gce-instance/org-np-app1.tfvars.example](./examples/res-gce-instance/org-np-app1.tfvars.example))
+8. DNS Managed Zones (2nd iteration)
+    - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
+    - Uncomment [./examples/dns/org-np-app1.tf](./examples/dns/org-np-app1.tf) VM content
+9. GKE Project
+    - (e.g. [./examples/prj-gke/org-np-app1.tfvars.example](./examples/prj-gke/org-np-app1.tfvars.example))
+10. GKE Cluster
+    - (e.g. [./examples/res-gce-cluster/org-np-app1.tfvars.example](./examples/res-gke-cluster/org-np-app1.tfvars.example))
+11. DNS Managed Zones (3rd iteration)
+    - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
+    - Uncomment [./examples/dns/org-np-app1.tf](./examples/dns/org-np-app1.tf) GKE content
 
 
 ## Bootstrap
@@ -129,6 +142,8 @@ gcloud services enable admin.googleapis.com \
 gcloud services enable cloudresourcemanager.googleapis.com \
   --project ${TF_ADMIN}
 gcloud services enable cloudbilling.googleapis.com \
+  --project ${TF_ADMIN}
+gcloud services enable cloudkms.googleapis.com \
   --project ${TF_ADMIN}
 gcloud services enable compute.googleapis.com \
   --project ${TF_ADMIN}

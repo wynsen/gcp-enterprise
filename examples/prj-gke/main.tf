@@ -1,4 +1,4 @@
-# Example of a Compute Project deployment
+# Example of a GKE Project deployment
 
 provider "google" {
   region      = "${var.region}"
@@ -12,13 +12,13 @@ provider "google-beta" {
   version     = "2.7.0"
 }
 
-# General Compute Project Configuration
-module "prj_compute" {
+# GKE Project Configuration
+module "prj_gke" {
   source = "github.com/wynsen/gcp-enterprise//modules/prj-compute?ref=v0.0.3"
 
   company_id               = "org"
   asset_id                 = "app1"
-  component_id             = "vm"
+  component_id             = "gke"
   environment_id           = "dev"
   instance_id              = ""
   org_id                   = ""
@@ -28,6 +28,8 @@ module "prj_compute" {
   editor_group_email       = "${var.editor_group_email}"
   host_project_id          = "${var.host_project_id}"
   shared_network_name      = "org-shared-net-int-vpc"
-  ipv4_range_primary       = "10.0.1.0/24"
+  ipv4_range_primary       = "10.0.30.0/27"
+  ipv4_range_secondary0    = "10.0.32.0/20"
+  ipv4_range_secondary1    = "10.0.28.0/26"
   subnet_flow_logs         = false
 }

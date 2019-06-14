@@ -12,10 +12,14 @@ variable "host_project_id" {
   description = "Shared VPC Network Host Project ID"
 }
 
-variable "shared_vpc_name" {
+variable "shared_network_name" {
   description = "Shared VPC Network Name"
 }
 
-variable "service_project_id" {
-  description = "Service Project ID"
+variable "service_project_gce_id" {
+  description = "Compute Service Project ID"
+}
+
+variable "service_project_gke_id" {
+  description = "GKE Service Project ID"
 }
