@@ -37,8 +37,9 @@ data "google_compute_network" "shared" {
   project = "${var.host_project_id}"
 }
 
-
+/*
 # Split DNS configuration for Google APIs resolving to Restricted IPs
+# Private Google Access seems to be incompatible with OS Login... Requires investigation
 resource "google_dns_managed_zone" "apis" {
   provider   = "google-beta"
   name       = "${data.google_project.host_project.name}-apis-dns"
@@ -74,7 +75,7 @@ resource "google_dns_record_set" "apis_cname" {
 
   rrdatas = ["restricted.googleapis.com."]
 }
-
+*/
 
 # Split DNS configuration for GCR IO resolving to Restricted IPs
 resource "google_dns_managed_zone" "gcr" {

@@ -14,7 +14,8 @@ provider "google-beta" {
 
 # General Compute Project Configuration
 module "prj_compute" {
-  source = "github.com/wynsen/gcp-enterprise//modules/prj-compute?ref=v0.0.3"
+#  source = "github.com/wynsen/gcp-enterprise//modules/prj-compute?ref=v0.0.4"
+  source = "../../modules/prj-compute"
 
   company_id               = "org"
   asset_id                 = "app1"

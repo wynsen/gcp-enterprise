@@ -42,6 +42,21 @@ resource "google_compute_shared_vpc_service_project" "project" {
   depends_on      = ["google_project_service.project_compute"]
 }
 
+# Enable Cloud Storage APIs in the Service Project
+resource "google_project_service" "storage" {
+  project            = "${google_project.project.project_id}"
+  service            = "storage-api.googleapis.com"
+  disable_on_destroy = false
+  depends_on = ["google_compute_shared_vpc_service_project.project"]
+}
+
+resource "google_project_service" "storagecomponent" {
+  project            = "${google_project.project.project_id}"
+  service            = "storage-component.googleapis.com"
+  disable_on_destroy = false
+  depends_on = ["google_compute_shared_vpc_service_project.project"]
+}
+
 # Create a Subnet for Service Project with a single Primary IP Range (e.g. for VMs)
 resource "google_compute_subnetwork" "subnet" {
   name                     = "${local.deployment_name}-subnet"
@@ -90,4 +105,28 @@ resource "google_compute_subnetwork_iam_member" "subnetuser_editors" {
   role       = "roles/compute.networkUser"
   member     = "group:${var.editor_group_email}"
   depends_on = ["google_compute_shared_vpc_service_project.project"]
+}
+
+# Allow the VM Instances in this Project to interface with each other
+# Requires all VM Instances to be configured with a Project ID Tag
+# A system is to exist to ensure no VM Instances are configured with a different Project ID Tag
+resource "google_compute_firewall" "subnet_int" {
+  name    = "allow-int-${google_project.project.project_id}-all"
+  project = "${var.host_project_id}"
+  network = "${data.google_compute_network.shared.self_link}"
+
+  allow {
+    protocol = "icmp"
+  }
+
+  allow {
+    protocol = "tcp"
+  }
+
+  allow {
+    protocol = "udp"
+  }
+
+  source_tags = ["${google_project.project.project_id}"]
+  target_tags = ["${google_project.project.project_id}"]
 }

@@ -1,0 +1,4 @@
+credentials_file_path = "~/.config/gcloud/terraform-123456789001-editor.json"
+project_id = "org-app1-vm-dev-123456"
+vault_url = "https://10.0.1.253:8200"
+vault_token = "9h45vtn8lvt3np93vt4wqn3qns"
