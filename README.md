@@ -4,6 +4,7 @@ See Medium stories for more details on the design and use of this Terraform code
 - [GCP: Folder Hierarchy & Group Management with Terraform](https://medium.com/@wynsen/gcp-folder-hierarchy-group-management-with-terraform-3a870cd5357e)
 - [GCP: Shared VPC Network, etc. Management with Terraform](https://medium.com/@wynsen/gcp-shared-vpc-network-etc-management-with-terraform-c011d71a1042)
 - [GCP: Private Kubernetes Cluster, etc. Management with Terraform](https://medium.com/@wynsen/gcp-private-kubernetes-cluster-etc-management-with-terraform-36c9df9279d7)
+- [GCP: HashiCorp Vault Deployment with Terraform](https://medium.com/@wynsen/gcp-hashicorp-vault-deployment-with-terraform-4123744297ae)
 
 ## Pre-Requisites
 1. Bootstrap Terraform
@@ -34,7 +35,7 @@ See Medium stories for more details on the design and use of this Terraform code
     - Comment out Images Project Variable (i.e. images_project_id)
 6. Compute Project
     - (e.g. [./examples/prj-compute/org-np-app1.tfvars.example](./examples/prj-compute/org-np-app1.tfvars.example))
-7. GCE Instance
+7. GCE Instance (Bastion)
     - (e.g. [./examples/res-gce-instance/org-np-app1.tfvars.example](./examples/res-gce-instance/org-np-app1.tfvars.example))
 8. DNS Managed Zones (2nd iteration)
     - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
@@ -46,6 +47,10 @@ See Medium stories for more details on the design and use of this Terraform code
 11. DNS Managed Zones (3rd iteration)
     - (e.g. [./examples/dns/org-shared-net.tfvars.example](./examples/dns/org-shared-net.tfvars.example))
     - Uncomment [./examples/dns/org-np-app1.tf](./examples/dns/org-np-app1.tf) GKE content
+12. HashiCorp Vault+Consul Cluster
+    - (e.g. [./examples/res-vault/org-np-app1.tfvars.example](./examples/res-vault/org-np-app1.tfvars.example))
+13. Testing Vault GCP Secrets Backend
+    - (e.g. [./examples/res-sa/org-np-app1.tfvars.example](./examples/res-sa/org-np-app1.tfvars.example))
 
 
 ## Bootstrap
